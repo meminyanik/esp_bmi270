@@ -1,0 +1,11 @@
+# ESP-IDF default build directory name
+build
+
+# Visual Studio cache/options directory
+.vs/
+.vscode/
+
+# Build results
+[Dd]ebug
+x64/
+x86/
