@@ -8,15 +8,15 @@
 /*
   Module Name:
 
-	mpu6050_external.h
+	bmi270_external.h
 
   Abstract:
 
-	The header file of the MPU6050 external API
+	The header file of the BMI270 external API
 */
 
-#ifndef MPU6050_EXTERNAL_H
-#define MPU6050_EXTERNAL_H
+#ifndef BMI270_EXTERNAL_H
+#define BMI270_EXTERNAL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +33,7 @@ extern "C" {
 #include "I2Cdev.h"
 
 
-/* Initialize the MPU6050 */
+/* Initialize the BMI270 */
 void bmi270Initialize(void);
 
 #ifdef __cplusplus

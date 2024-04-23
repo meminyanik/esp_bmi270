@@ -35,6 +35,11 @@ THE SOFTWARE.
 #ifndef _I2CDEV_H_
 #define _I2CDEV_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <driver/i2c.h>
 
 
@@ -77,5 +82,9 @@ class I2Cdev {
         static void SelectRegister(uint8_t dev, uint8_t reg);
         //static I2C_TransferReturn_TypeDef transfer(I2C_TransferSeq_TypeDef *seq, uint16_t timeout=I2Cdev::readTimeout);
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _I2CDEV_H_ */

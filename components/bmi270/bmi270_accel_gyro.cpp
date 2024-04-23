@@ -168,8 +168,6 @@ static void bmi270Task(void *arg)
             }
         }
     }
-
-    return rslt;
     
     // ESP_LOGI(TAG, "BMI270 connection is succesfull at data rate: %0.2fHz", bmi270_rate_Hz);
 }
