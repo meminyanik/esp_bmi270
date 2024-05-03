@@ -3,6 +3,11 @@
 
 #include "I2Cdev.h"
 #include "bmi270.h"
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+#include "driver/gpio.h"
+#include "esp_sleep.h"
 
 // The BMI270 API distinguishes between "data" and "feature" interrupt sources.
 // This mapInterruptToPin() function does not distinguish between those sources,

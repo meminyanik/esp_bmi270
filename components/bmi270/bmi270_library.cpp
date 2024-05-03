@@ -76,10 +76,22 @@ int8_t BMI270::beginI2C(uint8_t address)
 /// @return Error code (0 is success, negative is failure, positive is warning)
 int8_t BMI270::beginSPI(uint8_t csPin, uint32_t clockFrequency)
 {
+    /* Prepare configuration for the Radar Trigger Gpio Pin */
+    uint8_t csPinSel = (1ULL<<csPin);
+    gpio_config_t csPinConfig = {
+        .pin_bit_mask = csPinSel,
+        .mode = GPIO_MODE_INPUT_OUTPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE
+    };
+
+    /* configure GPIO with the given settings */
+    gpio_config(&csPinConfig);
+    
     // Set up chip select pin
     interfaceData.spiCSPin = csPin;
-    digitalWrite(csPin, HIGH); // Write high now to ensure pin doesn't go low
-    pinMode(csPin, OUTPUT);
+    gpio_set_level((gpio_num_t)csPin, 1); // Write high now to ensure pin doesn't go low
 
     // Set desired clock frequency
     interfaceData.spiClockFrequency = clockFrequency;
@@ -1193,8 +1205,7 @@ BMI2_INTF_RETURN_TYPE BMI270::readRegisters(uint8_t regAddress, uint8_t* dataBuf
 BMI2_INTF_RETURN_TYPE BMI270::readRegistersI2C(uint8_t regAddress, uint8_t* dataBuffer, uint32_t numBytes, BMI270_InterfaceData* interfaceData)
 {
     // I2C library call
-    I2Cdev::readBytes(interfaceData->i2cAddress, regAddress, (uint8_t)numBytes, dataBuffer);
-
+    I2Cdev::readBytes(interfaceData->i2cAddress, regAddress, numBytes, dataBuffer);
     return BMI2_OK;
 }
 
@@ -1207,8 +1218,7 @@ BMI2_INTF_RETURN_TYPE BMI270::readRegistersI2C(uint8_t regAddress, uint8_t* data
 BMI2_INTF_RETURN_TYPE BMI270::readRegistersSPI(uint8_t regAddress, uint8_t* dataBuffer, uint32_t numBytes, BMI270_InterfaceData* interfaceData)
 {
     // TODO: SPI will be supported later. For now, call I2C library
-    I2Cdev::readBytes(interfaceData->i2cAddress, regAddress, (uint8_t)numBytes, dataBuffer);
-
+    I2Cdev::readBytes(interfaceData->i2cAddress, regAddress, numBytes, dataBuffer);
     return BMI2_OK;
 }
 
@@ -1252,8 +1262,7 @@ BMI2_INTF_RETURN_TYPE BMI270::writeRegisters(uint8_t regAddress, const uint8_t* 
 BMI2_INTF_RETURN_TYPE BMI270::writeRegistersI2C(uint8_t regAddress, const uint8_t* dataBuffer, uint32_t numBytes, BMI270_InterfaceData* interfaceData)
 {
     // I2C library call
-    I2Cdev::writeBytes(interfaceData->i2cAddress, uint8_t regAddress, (uint8_t)numBytes, dataBuffer);
-    
+    I2Cdev::writeBytes(interfaceData->i2cAddress, regAddress, numBytes, dataBuffer);
     return BMI2_OK;
 }
 
@@ -1266,8 +1275,7 @@ BMI2_INTF_RETURN_TYPE BMI270::writeRegistersI2C(uint8_t regAddress, const uint8_
 BMI2_INTF_RETURN_TYPE BMI270::writeRegistersSPI(uint8_t regAddress, const uint8_t* dataBuffer, uint32_t numBytes, BMI270_InterfaceData* interfaceData)
 {
     // TODO: SPI will be supported later. For now, call I2C library
-    I2Cdev::writeBytes(interfaceData->i2cAddress, uint8_t regAddress, (uint8_t)numBytes, dataBuffer);
-
+    I2Cdev::writeBytes(interfaceData->i2cAddress, regAddress, numBytes, dataBuffer);
     return BMI2_OK;
 }
 
@@ -1276,7 +1284,7 @@ BMI2_INTF_RETURN_TYPE BMI270::writeRegistersSPI(uint8_t regAddress, const uint8_
 /// @param interfacePtr Pointer to interface data, see BMI270_InterfaceData
 void BMI270::usDelay(uint32_t period, void* interfacePtr)
 {
-    delayMicroseconds(period);
+    usleep(period);
 }
 
 /// @brief Helper function to generate the correct conversion value for accelerometer data
