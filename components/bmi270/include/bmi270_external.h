@@ -33,6 +33,9 @@ extern "C" {
 #include "I2Cdev.h"
 
 
+/* Run the MPU task at specified rate */
+#define MPU_FRAME_PERIOD_MS   10
+
 /* Initialize the BMI270 */
 void bmi270Initialize(void);
 
